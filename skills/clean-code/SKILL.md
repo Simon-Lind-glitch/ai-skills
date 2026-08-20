@@ -37,6 +37,8 @@ Use this skill when:
 - **No Side Effects**: Functions shouldn't secretly change global state.
 
 ## 3. Comments
+> For the full rules on when and how to comment, use the [`code-commenting`](../code-commenting/SKILL.md) skill alongside this one — load both to get the complete context.
+
 - **Don't Comment Bad Code—Rewrite It**: Most comments are a sign of failure to express ourselves in code.
 - **Explain Yourself in Code**: 
   ```python

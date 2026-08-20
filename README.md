@@ -8,7 +8,8 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 
 | Skill | What it does | Source |
 | --- | --- | --- |
-| [`clean-code`](skills/clean-code/) | Apply Robert C. Martin's *Clean Code* principles — naming, small functions, error handling, code smells. | [sickn33/agentic-awesome-skills](https://github.com/sickn33/agentic-awesome-skills) |
+| [`clean-code`](skills/clean-code/) | Apply Robert C. Martin's *Clean Code* principles — naming, small functions, error handling, code smells. | [ClawForge](https://github.com/jackjin1997/ClawForge) |
+| [`code-commenting`](skills/code-commenting/) | When and how to comment — the non-obvious "why", placement that survives refactors, comments readable in 10 months. Pairs with `clean-code`. | Team convention |
 | [`tdd`](skills/tdd/) | Test-driven development: red → green → refactor, behavior-focused tests, vertical slices. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | [`git-conventions`](skills/git-conventions/) | Branch names from Jira tickets, Conventional Commits, and conventional MR titles that drive semantic release. | Team convention |
 

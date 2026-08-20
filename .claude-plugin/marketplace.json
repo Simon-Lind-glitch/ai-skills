@@ -1,0 +1,14 @@
+{
+  "name": "ai-skills",
+  "owner": {
+    "name": "Simon Lind"
+  },
+  "description": "Simon's curated collection of AI agent skills, packaged as an installable Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "ai-skills",
+      "source": "./",
+      "description": "Curated engineering skills: clean-code (Uncle Bob's Clean Code principles) and TDD (red-green-refactor, behavior-focused tests)."
+    }
+  ]
+}

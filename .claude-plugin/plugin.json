@@ -1,0 +1,8 @@
+{
+  "name": "ai-skills",
+  "description": "Simon's curated engineering skills for Claude Code: clean-code and test-driven development.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Simon Lind"
+  }
+}

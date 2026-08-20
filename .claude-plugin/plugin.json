@@ -1,7 +1,7 @@
 {
   "name": "ai-skills",
-  "description": "Simon's curated engineering skills for Claude Code: clean-code and test-driven development.",
-  "version": "0.1.0",
+  "description": "Simon's curated engineering skills for Claude Code: clean-code, code-commenting, TDD, and git conventions.",
+  "version": "0.2.0",
   "author": {
     "name": "Simon Lind"
   }

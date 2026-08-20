@@ -8,7 +8,7 @@
     {
       "name": "ai-skills",
       "source": "./",
-      "description": "Curated engineering skills: clean-code (Uncle Bob's Clean Code principles) and TDD (red-green-refactor, behavior-focused tests)."
+      "description": "Curated engineering skills: clean-code (Uncle Bob's Clean Code principles), code-commenting (when and how to comment), TDD (red-green-refactor, behavior-focused tests), and git conventions."
     }
   ]
 }

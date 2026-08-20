@@ -10,6 +10,7 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 | --- | --- | --- |
 | [`clean-code`](skills/clean-code/) | Apply Robert C. Martin's *Clean Code* principles — naming, small functions, error handling, code smells. | [sickn33/agentic-awesome-skills](https://github.com/sickn33/agentic-awesome-skills) |
 | [`tdd`](skills/tdd/) | Test-driven development: red → green → refactor, behavior-focused tests, vertical slices. | [mattpocock/skills](https://github.com/mattpocock/skills) |
+| [`git-conventions`](skills/git-conventions/) | Branch names from Jira tickets, Conventional Commits, and conventional MR titles that drive semantic release. | Team convention |
 
 ## Install
 

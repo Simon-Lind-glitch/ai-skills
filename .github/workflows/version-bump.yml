@@ -1,0 +1,95 @@
+name: version-bump
+
+# Auto-bumps the plugin version on every push to main, reading Conventional
+# Commit types since the last release tag:
+#   feat!/fix!/BREAKING CHANGE -> major
+#   feat                       -> minor
+#   fix                        -> patch
+#   anything else              -> no release (chore/docs/refactor/... alone don't bump)
+# The bump commit carries [skip ci], and GitHub skips runs whose head commit
+# says [skip ci], so this never loops.
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: version-bump
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Decide bump level
+        id: decide
+        run: |
+          set -euo pipefail
+          CURRENT=$(jq -r '.version' .claude-plugin/plugin.json)
+          echo "current=$CURRENT"
+
+          LAST_TAG=$(git describe --tags --abbrev=0 --match "v*" 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            echo "Last tag: $LAST_TAG"
+            RANGE="$LAST_TAG..HEAD"
+          else
+            echo "No previous tag; scanning full history"
+            RANGE="HEAD"
+          fi
+
+          LOG=$(git log "$RANGE" --no-merges --pretty=format:'%s%n%b')
+
+          if echo "$LOG" | grep -qE '^[a-z]+(\([^)]*\))?!:' || echo "$LOG" | grep -q 'BREAKING CHANGE'; then
+            BUMP=major
+          elif echo "$LOG" | grep -qE '^feat(\([^)]*\))?:'; then
+            BUMP=minor
+          elif echo "$LOG" | grep -qE '^fix(\([^)]*\))?:'; then
+            BUMP=patch
+          else
+            BUMP=none
+          fi
+          echo "Bump level: $BUMP"
+
+          if [ "$BUMP" = "none" ]; then
+            echo "bump=none" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          IFS='.' read -r MAJ MIN PAT <<< "$CURRENT"
+          case "$BUMP" in
+            major) MAJ=$((MAJ+1)); MIN=0; PAT=0 ;;
+            minor) MIN=$((MIN+1)); PAT=0 ;;
+            patch) PAT=$((PAT+1)) ;;
+          esac
+          NEW="$MAJ.$MIN.$PAT"
+          echo "New version: $NEW"
+          echo "bump=$BUMP" >> "$GITHUB_OUTPUT"
+          echo "new=$NEW" >> "$GITHUB_OUTPUT"
+
+      - name: Apply bump, tag, and release
+        if: steps.decide.outputs.bump != 'none'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEW: ${{ steps.decide.outputs.new }}
+          BUMP: ${{ steps.decide.outputs.bump }}
+        run: |
+          set -euo pipefail
+          jq --arg v "$NEW" '.version = $v' .claude-plugin/plugin.json > plugin.tmp
+          mv plugin.tmp .claude-plugin/plugin.json
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .claude-plugin/plugin.json
+          git commit -m "chore(release): v$NEW [skip ci]"
+          git tag "v$NEW"
+          git push origin HEAD:main --tags
+
+          gh release create "v$NEW" --title "v$NEW" \
+            --notes "Automated $BUMP release. See commits since the previous tag for details."

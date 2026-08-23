@@ -55,6 +55,29 @@ Write the container for the project in front of you — read its manifests, its 
 - **`postCreateCommand` is idempotent.** It re-runs on every rebuild.
 - **Install the agent CLI in the image, never its credentials.** Auth lives in the volume, so the image stays free of secrets and shareable.
 
+## Carry the skills into the container
+
+A container that does not know about these skills is a fresh agent with no conventions. Wiring them in belongs to creating the container — it is not a step left for whoever opens it next. Three pieces, because each covers a different failure:
+
+**Commit `.claude/settings.json`** at the project root, declaring the marketplace and enabling the plugin. This is the durable record: it travels with the repo and reads the same on the host and inside the container.
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "ai-skills": {
+      "source": { "source": "github", "repo": "Simon-Lind-glitch/ai-skills" }
+    }
+  },
+  "enabledPlugins": { "ai-skills@ai-skills": true }
+}
+```
+
+**Materialize the install in `postCreateCommand`.** Settings declare intent, but the marketplace clone lives under `$HOME/.claude/plugins`, which is container-local, and the project-scope install record is keyed to an absolute project path that differs from the host's. So the script runs `claude plugin marketplace add` and `claude plugin install <plugin>@<marketplace> --scope project -y`, tolerating "already present" so a rebuild is not a failure. All of it is public-repo cloning with no credentials involved, which is what makes it safe to run unattended.
+
+**Record the recovery in `CLAUDE.md`**, one line: the skills come from the committed settings plus the postCreate warmup, and if they seem missing, `claude plugin list` then re-running the script re-warms them.
+
+The named `~/.claude` volume from the rules above is what keeps the login and the installed plugin across rebuilds, so this warmup is a first-create cost rather than a per-session one.
+
 ## Checklist
 
 - [ ] Did I check the running environment, rather than infer the sandbox from a `devcontainer.json` on disk?
@@ -65,3 +88,5 @@ Write the container for the project in front of you — read its manifests, its 
 - [ ] Is every mount either the workspace, a named volume, or `readonly`?
 - [ ] Is each secret a single named variable rather than a mounted directory?
 - [ ] Does a rebuild reproduce the environment without a manual step?
+- [ ] Does a committed `.claude/settings.json` declare the marketplace and enable the plugin?
+- [ ] Does `postCreateCommand` materialize the install, tolerating a rebuild?

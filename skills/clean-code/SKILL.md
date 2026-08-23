@@ -71,6 +71,8 @@ Use this skill when:
 
 ## 5. Objects and Data Structures
 
+> For designing the interfaces themselves — how deep a module is, where its seam belongs, what stays behind it — use the [`codebase-design`](../codebase-design/SKILL.md) skill. It owns the module, interface, depth, seam, adapter, leverage and locality vocabulary.
+
 - **Data Abstraction**: Hide the implementation behind interfaces.
 - **The Law of Demeter**: A module should not know about the innards of the objects it manipulates. Avoid `a.getB().getC().doSomething()`.
 - **Data Transfer Objects (DTO)**: Classes with public variables and no functions.
@@ -84,6 +86,8 @@ Use this skill when:
 
 ## 7. Unit Tests
 
+> The [`tdd`](../tdd/SKILL.md) skill owns the loop itself — seams, vertical slices, and the anti-patterns. What follows is the summary; that skill is the rules.
+
 - **The Three Laws of TDD**:
   1. Don't write production code until you have a failing unit test.
   2. Don't write more of a unit test than is sufficient to fail.
@@ -94,6 +98,12 @@ Use this skill when:
 
 - **Small!**: Classes should have a single responsibility (SRP).
 - **The Stepdown Rule**: We want the code to read like a top-down narrative.
+
+## Smallness: implementation vs interface
+
+The smallness above applies to *implementations*: short functions and small classes are what make code readable at the line level. It does not follow that a system should be many small modules. A **deep** module — a large implementation behind a small interface — is the goal, and decomposing until every class is tiny produces shallow pass-throughs instead.
+
+When the two pull against each other, the interface wins: hide more behind it, and keep the implementation readable by the rules above rather than by splitting it across callers. See [`codebase-design`](../codebase-design/SKILL.md).
 
 ## 9. Smells and Heuristics
 

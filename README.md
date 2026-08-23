@@ -11,6 +11,7 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 | [`clean-code`](skills/clean-code/) | Apply Robert C. Martin's *Clean Code* principles — naming, small functions, error handling, code smells. | [ClawForge](https://github.com/jackjin1997/ClawForge) |
 | [`code-commenting`](skills/code-commenting/) | When and how to comment — the non-obvious "why", placement that survives refactors, comments readable in 10 months. Pairs with `clean-code`. | Team convention |
 | [`tdd`](skills/tdd/) | Test-driven development: red → green → refactor, behavior-focused tests, vertical slices. | [mattpocock/skills](https://github.com/mattpocock/skills) |
+| [`codebase-design`](skills/codebase-design/) | Shared vocabulary for deep modules — interface, depth, seam, adapter, leverage, locality — plus deepening strategy and the design-it-twice pattern. Referenced by `tdd` and `clean-code`. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | [`git-conventions`](skills/git-conventions/) | Branch names from Jira tickets, Conventional Commits, and conventional MR titles that drive semantic release. | Team convention |
 | [`devcontainer-setup`](skills/devcontainer-setup/) | Get a devcontainer in place before development, so the agent runs sandboxed away from host credentials. Asks first; not a hard gate. | Team convention |
 

@@ -18,7 +18,7 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 
 Add this repo as a marketplace, then install the plugin. All skills come with it.
 
-```
+```text
 /plugin marketplace add Simon-Lind-glitch/ai-skills
 /plugin install ai-skills@ai-skills
 ```

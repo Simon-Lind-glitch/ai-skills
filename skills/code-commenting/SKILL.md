@@ -8,6 +8,7 @@ description: When and how to write code comments — comment the non-obvious "wh
 How to decide whether a comment should exist, and how to write it so it still helps someone reading the code much later. Use this alongside the [`clean-code`](../clean-code/SKILL.md) skill — clean-code covers naming, functions, and structure that often remove the need for a comment in the first place; this skill covers the comments that remain.
 
 ## Comments
+
 - Only comment the non-obvious "why" or missing context. Never restate what the code does.
 - A test or a better name beats a comment when either will do.
 - Put the comment on the line that is easy to get wrong, not at the top of the function. Its job is to stop a plausible refactor from breaking something.
@@ -19,6 +20,7 @@ How to decide whether a comment should exist, and how to write it so it still he
 - While editing code, delete or fix any nearby comment you cannot verify.
 
 ## Describe what is, not what changed
+
 When you change code, the comment (or doc) must describe the state that now exists — not narrate the edit. A reader ten months from now has no memory of the old version, so any reference to it is noise at best and misleading at worst.
 
 - Never write what the code *no longer* does: no "we used to X", "this replaces the old Y", "changed from Z". The diff and git history already record the change; the comment should not.

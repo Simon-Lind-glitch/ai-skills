@@ -11,16 +11,18 @@ How this team names branches, writes commits, and titles merge requests. Follow 
 
 Always name a branch after its Jira ticket, followed by a short kebab-case description:
 
-```
+```text
 <TICKET-KEY>/<short-description>
 ```
 
 Examples:
+
 - `PE-312/fix-login-redirect`
 - `PE-451/add-invoice-export`
 - `PE-88/bump-node-20`
 
 Rules:
+
 - The ticket key is uppercase and comes first (`PE-312`, not `pe-312`).
 - One branch per ticket. If there's no ticket, create one first — every branch traces to a ticket.
 - Keep the description a few words, lowercase, hyphen-separated. No spaces or slashes beyond the one after the ticket.
@@ -29,7 +31,7 @@ Rules:
 
 Every commit follows [Conventional Commits](https://www.conventionalcommits.org):
 
-```
+```text
 <type>(<optional scope>): <description>
 
 <optional body>
@@ -46,7 +48,7 @@ Every commit follows [Conventional Commits](https://www.conventionalcommits.org)
 
 **Reference the Jira ticket** in the footer so the commit links back to the ticket:
 
-```
+```text
 feat(auth): add SSO login via SAML
 
 Wires the identity provider into the login flow and adds the callback route.
@@ -55,6 +57,7 @@ PE-312
 ```
 
 Examples:
+
 - `fix(checkout): prevent double-charge on retry` + `PE-451` footer
 - `refactor(api): extract pagination helper`
 - `chore(deps): bump express to 4.19`

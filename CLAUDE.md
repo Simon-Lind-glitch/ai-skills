@@ -1,6 +1,6 @@
 # ai-skills
 
-A Claude Code plugin: five skills as Markdown under `skills/`, described by
+A Claude Code plugin: six skills as Markdown under `skills/`, described by
 `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`. There is no
 build and no test suite — the artifacts are the Markdown files and the two
 manifests.

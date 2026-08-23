@@ -12,6 +12,7 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 | [`code-commenting`](skills/code-commenting/) | When and how to comment — the non-obvious "why", placement that survives refactors, comments readable in 10 months. Pairs with `clean-code`. | Team convention |
 | [`tdd`](skills/tdd/) | Test-driven development: red → green → refactor, behavior-focused tests, vertical slices. | [mattpocock/skills](https://github.com/mattpocock/skills) |
 | [`git-conventions`](skills/git-conventions/) | Branch names from Jira tickets, Conventional Commits, and conventional MR titles that drive semantic release. | Team convention |
+| [`devcontainer-setup`](skills/devcontainer-setup/) | Get a devcontainer in place before development, so the agent runs sandboxed away from host credentials. Asks first; not a hard gate. | Team convention |
 
 ## Install
 

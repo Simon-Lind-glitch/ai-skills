@@ -1,0 +1,31 @@
+{
+  "name": "ai-skills",
+  "build": { "dockerfile": "Dockerfile" },
+
+  "remoteUser": "node",
+  "workspaceFolder": "/workspaces/ai-skills",
+
+  "mounts": [
+    "source=ai-skills-claude,target=/home/node/.claude,type=volume"
+  ],
+
+  // One named variable, so what crosses the boundary is auditable. Everything
+  // else the host account can reach — ~/.ssh, ~/.aws, the other repos on the
+  // disk — stays outside. Empty on a host that has no token, which is fine:
+  // gh then just asks you to log in.
+  "remoteEnv": {
+    "GH_TOKEN": "${localEnv:GH_TOKEN}"
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "DavidAnson.vscode-markdownlint",
+        "timonwong.shellcheck",
+        "github.vscode-github-actions"
+      ]
+    }
+  }
+}

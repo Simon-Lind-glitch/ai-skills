@@ -1,0 +1,10 @@
+{
+  // The skills are prose meant to be read as prose; where a paragraph wraps is
+  // a writing decision, not a lint finding. Everything else stays on, because
+  // a skill file that renders wrong is a skill the agent reads wrong.
+  "config": {
+    "MD013": false
+  },
+  "globs": ["**/*.md"],
+  "ignores": ["node_modules"]
+}

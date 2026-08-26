@@ -8,6 +8,10 @@ name: version-bump
 #   anything else              -> no release (chore/docs/refactor/... alone don't bump)
 # The bump commit carries [skip ci], and GitHub skips runs whose head commit
 # says [skip ci], so this never loops.
+#
+# The decision itself lives in .github/scripts/decide-bump.sh, so it can be run
+# and tested locally rather than only by pushing to main and watching what
+# happens. .github/scripts/test-version-bump.sh covers it, and runs here first.
 
 on:
   push:
@@ -28,48 +32,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Test the release logic
+        run: .github/scripts/test-version-bump.sh
+
       - name: Decide bump level
         id: decide
         run: |
           set -euo pipefail
           CURRENT=$(jq -r '.version' .claude-plugin/plugin.json)
-          echo "current=$CURRENT"
-
-          LAST_TAG=$(git describe --tags --abbrev=0 --match "v*" 2>/dev/null || echo "")
-          if [ -n "$LAST_TAG" ]; then
-            echo "Last tag: $LAST_TAG"
-            RANGE="$LAST_TAG..HEAD"
-          else
-            echo "No previous tag; scanning full history"
-            RANGE="HEAD"
-          fi
-
-          LOG=$(git log "$RANGE" --no-merges --pretty=format:'%s%n%b')
-
-          if echo "$LOG" | grep -qE '^[a-z]+(\([^)]*\))?!:' || echo "$LOG" | grep -q 'BREAKING CHANGE'; then
-            BUMP=major
-          elif echo "$LOG" | grep -qE '^feat(\([^)]*\))?:'; then
-            BUMP=minor
-          elif echo "$LOG" | grep -qE '^fix(\([^)]*\))?:'; then
-            BUMP=patch
-          else
-            BUMP=none
-          fi
-          echo "Bump level: $BUMP"
-
-          if [ "$BUMP" = "none" ]; then
-            echo "bump=none" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          IFS='.' read -r MAJ MIN PAT <<< "$CURRENT"
-          case "$BUMP" in
-            major) MAJ=$((MAJ+1)); MIN=0; PAT=0 ;;
-            minor) MIN=$((MIN+1)); PAT=0 ;;
-            patch) PAT=$((PAT+1)) ;;
-          esac
-          NEW="$MAJ.$MIN.$PAT"
-          echo "New version: $NEW"
+          BUMP=$(.github/scripts/decide-bump.sh)
+          NEW=$(.github/scripts/next-version.sh "$CURRENT" "$BUMP")
+          echo "Current $CURRENT, bump $BUMP, new $NEW"
           echo "bump=$BUMP" >> "$GITHUB_OUTPUT"
           echo "new=$NEW" >> "$GITHUB_OUTPUT"
 

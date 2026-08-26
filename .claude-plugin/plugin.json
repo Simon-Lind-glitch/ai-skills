@@ -1,8 +1,32 @@
 {
   "name": "ai-skills",
-  "description": "Simon's curated engineering skills for Claude Code: clean-code, code-commenting, codebase-design, TDD, git conventions, and devcontainer setup.",
+  "description": "Simon's curated engineering skills for Claude Code: clean-code, code-commenting, codebase-design, TDD, git conventions, devcontainer setup, lensed code review, waitwhat, and a /feature command that loads the engineering standards together.",
   "version": "0.6.0",
   "author": {
     "name": "Simon Lind"
-  }
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Simon-Lind-glitch/ai-skills",
+  "repository": "https://github.com/Simon-Lind-glitch/ai-skills",
+  "keywords": [
+    "skills",
+    "clean-code",
+    "tdd",
+    "codebase-design",
+    "code-review",
+    "git-conventions",
+    "devcontainer"
+  ],
+  "skills": [
+    "./skills/clean-code",
+    "./skills/code-commenting",
+    "./skills/codebase-design",
+    "./skills/devcontainer-setup",
+    "./skills/feature",
+    "./skills/git-conventions",
+    "./skills/lensed-review",
+    "./skills/setup-ai-skills",
+    "./skills/tdd",
+    "./skills/waitwhat"
+  ]
 }

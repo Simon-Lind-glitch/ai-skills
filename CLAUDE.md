@@ -53,6 +53,12 @@ run and tested without pushing to `main` to find out what happens:
 The workflow runs the tests before it decides, so a broken bump rule fails the
 release rather than cutting a wrong one.
 
+The [`git-conventions`](skills/git-conventions/SKILL.md) skill applies here for
+the Conventional Commit format the bump depends on, but this repo has no Jira
+project behind it. Skip the ticket parts: branches are named
+`<type>/<short-description>`, and commits and pull request titles carry no
+ticket key or footer.
+
 ## Development
 
 Work happens in the devcontainer (`.devcontainer/`) — reopen in it rather than

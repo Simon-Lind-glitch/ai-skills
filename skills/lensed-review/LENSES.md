@@ -73,7 +73,10 @@ so the shape of the fan-out is what determines speed.
 ## Lens catalog
 
 Each lens is one agent. Give it the mandate, the NOT list, the target, and the output
-contract.
+contract. Where an entry links another skill, that skill is the standard the lens judges
+against, and the lens agent does not inherit it: resolve the link against this file's
+directory to an absolute path, and instruct the lens to read that `SKILL.md` before
+judging — its own context gathering per rule 5, not a serial phase.
 
 1. **correctness**: Logic errors, wrong conditions or operators, off-by-one, null and
    undefined access, missing defaults, broken control flow, unreachable code, API contract

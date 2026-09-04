@@ -10,7 +10,7 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 
 Reachable only when you type them (`disable-model-invocation: true`), because firing unbidden would be expensive or presumptuous.
 
-- **[`feature`](skills/feature/SKILL.md)**: Build a feature with the engineering standards already in context. Inlines `codebase-design`, `tdd`, `clean-code`, `code-commenting`, and `git-conventions` at load time, ordered by when each applies, and arbitrates where they contradict each other.
+- **[`feature`](skills/feature/SKILL.md)**: Build a feature with the engineering standards already in context. Inlines `codebase-design`, `tdd`, `clean-code`, `code-commenting`, `docs-sync`, and `git-conventions` at load time, ordered by when each applies, and arbitrates where they contradict each other.
 - **[`lensed-review`](skills/lensed-review/SKILL.md)**: Multi-angle code audit. Fans out parallel read-only lens agents, then synthesizes one scored report. Reviews the local branch by default, or a GitHub PR / GitLab MR with the forge detected from the remote. Posts only with `--post`; never approves, never merges.
 - **[`setup-ai-skills`](skills/setup-ai-skills/SKILL.md)**: Wire a repo up to this plugin by writing the marketplace and plugin declaration into its `.claude/settings.json`. Run once per repo.
 - **[`waitwhat`](skills/waitwhat/SKILL.md)**: Stop, that last message did not land: re-pitch it in Simplified Technical English using the project's own vocabulary. Changes nothing and re-runs nothing.
@@ -23,6 +23,7 @@ Loaded automatically when the task matches, and also reachable by typing them.
 - **[`code-commenting`](skills/code-commenting/SKILL.md)**: When and how to comment — the non-obvious "why", placement that survives refactors, comments readable in 10 months. Pairs with `clean-code`.
 - **[`codebase-design`](skills/codebase-design/SKILL.md)**: Shared vocabulary for deep modules — interface, depth, seam, adapter, leverage, locality — plus deepening strategy and the design-it-twice pattern.
 - **[`devcontainer-setup`](skills/devcontainer-setup/SKILL.md)**: Get a devcontainer in place before development, so the agent runs sandboxed away from host credentials. Asks first; not a hard gate.
+- **[`docs-sync`](skills/docs-sync/SKILL.md)**: Find and fix the documentation a code change makes stale — grep the touched names across README, CLAUDE.md, and docs, then update or delete each hit. Doc changes ship in the same commit as the code. Pairs with `code-commenting`, which owns how the prose is written.
 - **[`git-conventions`](skills/git-conventions/SKILL.md)**: Branch names from Jira tickets, Conventional Commits, and conventional MR titles that drive semantic release.
 - **[`tdd`](skills/tdd/SKILL.md)**: Test-driven development: red → green → refactor, behavior-focused tests, vertical slices.
 
@@ -62,6 +63,7 @@ The original work in this repo is MIT ([`LICENSE`](LICENSE)). Vendored skills re
 | `lensed-review` | [cesdperez/llmfiles](https://github.com/cesdperez/llmfiles) | None declared |
 | `code-commenting` | Team convention | — |
 | `devcontainer-setup` | Team convention | — |
+| `docs-sync` | Team convention | — |
 | `feature` | Team convention | — |
 | `git-conventions` | Team convention | — |
 | `setup-ai-skills` | Team convention | — |

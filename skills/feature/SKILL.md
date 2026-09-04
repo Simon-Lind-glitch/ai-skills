@@ -1,6 +1,6 @@
 ---
 name: feature
-description: Build a feature with this repo's engineering standards already in context — codebase-design, tdd, clean-code, code-commenting, and git-conventions are inlined at load time, in the order the work happens.
+description: Build a feature with this repo's engineering standards already in context — codebase-design, tdd, clean-code, code-commenting, docs-sync, and git-conventions are inlined at load time, in the order the work happens.
 argument-hint: "[what to build]"
 disable-model-invocation: true
 allowed-tools:
@@ -11,7 +11,7 @@ allowed-tools:
 
 Build: **$ARGUMENTS**
 
-Five skills are inlined below. They are already in context — do not invoke them again, and
+Six skills are inlined below. They are already in context — do not invoke them again, and
 do not go looking for them on disk.
 
 ## The order the work happens
@@ -30,7 +30,10 @@ The skills overlap, so their precedence matters more than their content.
    `code-commenting`, which means the non-obvious _why_ on the line that is easy to get
    wrong, and nothing that narrates the change you just made. Refactoring is a stage of its
    own, not a step inside the red → green loop.
-5. **Branch, commit, and title the MR** per `git-conventions`, which is also what decides
+5. **Sync the docs.** Per `docs-sync`: list the names the change touched, grep the prose
+   for them, and update or delete every stale hit. A feature is not done while a doc it
+   contradicts still ships, and the doc changes go in the same commit as the code.
+6. **Branch, commit, and title the MR** per `git-conventions`, which is also what decides
    whether a release gets cut.
 
 ## Where they disagree
@@ -44,6 +47,10 @@ The skills overlap, so their precedence matters more than their content.
   `code-commenting` owns the ones that survive that test.
 - **`tdd` says refactoring is out of the loop; step 4 above is where it goes.** Do not
   refactor between red and green.
+- **`clean-code` says code should explain itself; `docs-sync` still demands prose.**
+  Self-documenting code reaches the person already reading the code, not the person
+  deciding whether to. The README and its kin stay in scope however clean the code is,
+  and `code-commenting` owns how that prose is written.
 
 If a rule below contradicts this section, this section wins.
 
@@ -70,6 +77,12 @@ If a rule below contradicts this section, this section wins.
 ## Standard: code-commenting
 
 !`cat "${CLAUDE_PLUGIN_ROOT}/skills/code-commenting/SKILL.md"`
+
+---
+
+## Standard: docs-sync
+
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/docs-sync/SKILL.md"`
 
 ---
 

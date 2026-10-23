@@ -1,6 +1,6 @@
 # ai-skills
 
-A Claude Code plugin: ten skills as Markdown under `skills/`, described by
+A Claude Code plugin: twelve skills as Markdown under `skills/`, described by
 `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`. The
 artifacts are the Markdown files and the two manifests; the only executable
 code is the release logic under `.github/`, which is the only thing with tests.
@@ -23,6 +23,11 @@ description matches). Pick deliberately: a skill that fans out subagents or
 writes to a forge should be user-invoked, so it cannot fire on a description
 match. The README groups skills under those two headings, so a change in
 invocation is also a README change.
+
+Comments and documentation are written in ASD-STE100 Simplified Technical
+English, and [`code-commenting`](skills/code-commenting/SKILL.md) is where that
+rule lives. A skill that writes comments or docs points at it in one line rather
+than restating the rules.
 
 Run `claude plugin validate . --strict` after touching either manifest.
 

@@ -46,6 +46,8 @@ Every commit follows [Conventional Commits](https://www.conventionalcommits.org)
 
 **Subject:** imperative mood, lowercase, no trailing period. Keep it under ~72 chars.
 
+**Body:** write it in ASD-STE100 Simplified Technical English, per the [`code-commenting`](../code-commenting/SKILL.md) skill. The same rule applies to the MR description.
+
 **Reference the Jira ticket** in the footer so the commit links back to the ticket:
 
 ```text

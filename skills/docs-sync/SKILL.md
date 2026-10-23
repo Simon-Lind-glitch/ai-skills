@@ -11,7 +11,8 @@ in the same commit as the change that makes them necessary — a follow-up task 
 
 This skill owns finding what a change made stale and deciding each hit's fate. The
 [`code-commenting`](../code-commenting/SKILL.md) skill owns how the surviving prose is
-written: describe what is, not what changed.
+written: in ASD-STE100 Simplified Technical English, and describing what is, not what
+changed.
 
 ## Find the stale docs mechanically
 
@@ -35,8 +36,8 @@ instead:
 
 ## Three fates per hit
 
-- **Update** it to describe the system that now exists, per code-commenting's rules: no
-  "now uses", no "no longer", no narration of the edit.
+- **Update** it to describe the system that now exists, per code-commenting's rules: in
+  ASD-STE100, with no "now uses", no "no longer", no narration of the edit.
 - **Delete** it when it documents something gone. Removals leave no trace in docs; they
   live in version control.
 - **Leave** it only in genuinely historical documents: a changelog, an ADR, release notes.

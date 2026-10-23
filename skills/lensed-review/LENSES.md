@@ -111,8 +111,9 @@ judging — its own context gathering per rule 5, not a serial phase.
    needless complexity, unclear naming, inconsistency with surrounding code. The
    [`clean-code`](../clean-code/SKILL.md) skill owns the naming and function rules, and
    [`code-commenting`](../code-commenting/SKILL.md) owns the comment ones: comments that
-   restate what the code does, that narrate a change rather than describe what is, or that
-   sit anywhere other than the line that is easy to get wrong.
+   restate what the code does, that narrate a change rather than describe what is, that
+   sit anywhere other than the line that is easy to get wrong, or that break its ASD-STE100
+   rules.
    - NOT: duplication, bugs, tests.
 
 5. **reuse**: DRY. Duplicated logic, reinvented helpers that already exist in this repo or

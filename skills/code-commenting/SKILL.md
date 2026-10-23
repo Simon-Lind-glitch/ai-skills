@@ -1,6 +1,6 @@
 ---
 name: code-commenting
-description: When and how to write code comments — comment the non-obvious "why", not the "what"; place comments where a refactor could break something; keep them readable in 10 months. Use whenever writing, reviewing, or editing comments and doc comments. Pairs with the clean-code skill.
+description: When and how to write code comments — comment the non-obvious "why", not the "what"; place comments where a refactor could break something; keep them readable in 10 months; write them, and all documentation prose, in ASD-STE100 Simplified Technical English. Use whenever writing, reviewing, or editing comments and doc comments. Pairs with the clean-code skill.
 ---
 
 # Code Commenting
@@ -16,8 +16,36 @@ How to decide whether a comment should exist, and how to write it so it still he
 - Write for someone reading in 10 months. Describe the constraint, not today's task. No "new", "for now", "temporary", "recently changed", no sprint or migration status, no dates.
 - Do not name Jira tickets or MRs by default. Only when the ticket holds context that does not fit in one line and will still matter later.
 - Reading rule: do not open a Jira ticket just because a comment names one. Only if the current task actually needs it.
-- Plain english. One or two lines. If it needs a paragraph, the code or the test is the wrong shape.
+- ASD-STE100 Simplified Technical English, per the section below. One or two lines. If it needs a paragraph, the code or the test is the wrong shape.
 - While editing code, delete or fix any nearby comment you cannot verify.
+
+## Write in ASD-STE100
+
+Every comment, doc comment, and documentation page — README, `CLAUDE.md`, `AGENTS.md`,
+`docs/`, ADRs — is written in ASD-STE100 Simplified Technical English. The reader is often
+not a native speaker, and is often an agent. Both read controlled language with fewer
+misreadings.
+
+- One topic per sentence. One instruction per sentence.
+- Keep sentences short: no more than 20 words in an instruction, 25 in a description.
+- Keep paragraphs short: no more than six sentences.
+- Use the active voice. Write "the parser rejects the token", not "the token is rejected".
+- Write instructions in the imperative: "Run the migration before the deploy."
+- Use one word for one meaning, and one meaning for one word. Do not use synonyms for
+  variety.
+- Use the simple tenses: past, present, future. Not "has been", not "will have".
+- Do not use phrasal verbs or idioms when a single plain verb exists: "start", not "kick
+  off"; "remove", not "get rid of".
+- Use articles ("the", "a") and do not drop words to compress the text. Telegraphic text
+  is not STE.
+- Use a vertical list for a sequence or a set of conditions, not a long sentence.
+
+Technical names are exempt from the STE dictionary: identifiers, commands, flags, file
+paths, product names, and the project's own vocabulary from `CONTEXT.md` or the
+`CLAUDE.md` chain. Use those exactly as the project spells them. Do not replace a
+project term with a "simpler" word.
+
+Code blocks, quoted error messages, and third-party text stay as they are.
 
 ## Describe what is, not what changed
 

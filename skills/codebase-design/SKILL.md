@@ -7,6 +7,8 @@ description: Shared vocabulary for designing deep modules. Use when the user wan
 
 Design **deep modules**: a lot of behaviour behind a small interface, placed at a clean seam, testable through that interface. Use this language and these principles wherever code is being designed or restructured. The aim is leverage for callers, locality for maintainers, and testability for everyone.
 
+Write interface doc comments, ADRs, and `CONTEXT.md` entries in ASD-STE100 Simplified Technical English, per the [`code-commenting`](../code-commenting/SKILL.md) skill. The terms in the glossary below are technical names, so STE does not replace them.
+
 ## Glossary
 
 Use these terms exactly: don't substitute "component," "service," "API," or "boundary." Consistent language is the whole point.

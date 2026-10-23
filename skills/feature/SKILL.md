@@ -1,7 +1,7 @@
 ---
 name: feature
-description: Build a feature with this repo's engineering standards already in context — codebase-design, tdd, clean-code, code-commenting, docs-sync, and git-conventions are inlined at load time, in the order the work happens, and review-loop runs last.
-argument-hint: "[what to build]"
+description: Build a feature with this repo's engineering standards already in context — codebase-design, tdd, clean-code, code-commenting, docs-sync, and git-conventions are inlined at load time, in the order the work happens, and review-loop runs last. With --plan, it proposes a step-by-step plan and waits for approval before it starts.
+argument-hint: "[--plan] [what to build]"
 disable-model-invocation: true
 allowed-tools:
   - Bash(cat ${CLAUDE_PLUGIN_ROOT}/skills/*)
@@ -11,6 +11,10 @@ allowed-tools:
 
 Build: **$ARGUMENTS**
 
+If the arguments include `--plan`, remove it from the text above: it is a flag, not part
+of what to build. Then start at step 0 below. Without `--plan`, skip step 0 and start at
+step 1.
+
 Six skills are inlined below. They are already in context — do not invoke them again, and
 do not go looking for them on disk. The seventh, `review-loop`, is loaded at step 7, when
 the work is ready for it.
@@ -19,6 +23,21 @@ the work is ready for it.
 
 The skills overlap, so their precedence matters more than their content.
 
+0. **Plan, then wait for approval.** Only with `--plan`. Read the code that the change
+   touches. Do not edit a file yet. Then write the plan in ASD-STE100 Simplified Technical
+   English, per `code-commenting`:
+   - Start with one or two sentences that tell what the change does and why.
+   - Then give numbered steps, in the order you will do them. Each step has one action
+     and one or two short sentences. Name the files, the interface, and the seam.
+   - Name the seams that you intend to test. The approval of the plan is the confirmation
+     of those seams in step 2.
+   - Name the docs that the change makes stale.
+   - End with the open questions and the risks. If there are none, say so.
+
+   Then stop and wait. The user can discuss the plan, change it, or accept it. Change the
+   plan and show it again until the user accepts it. Start step 1 only after the user
+   accepts the plan clearly. Silence or a question is not acceptance. If the work later
+   moves away from the accepted plan, stop, tell the user what changed, and ask again.
 1. **Shape the module before writing anything.** Decide the interface, where the seam
    goes, and how much sits behind it. Use the `codebase-design` vocabulary below to say it
    out loud: module, interface, depth, seam, adapter, leverage, locality.
@@ -103,6 +122,7 @@ If a rule below contradicts this section, this section wins.
 
 ## Now start
 
-Build **$ARGUMENTS**, following the order above, through to step 7. Begin at step 1: state
-the interface and the seam, and ask which seams should be tested. Do not write an implementation before
-there is a failing test for it.
+Build **$ARGUMENTS**, following the order above, through to step 7. With `--plan`, begin at
+step 0: write the plan and wait for the user to accept it. Without it, begin at step 1:
+state the interface and the seam, and ask which seams should be tested. Do not write an
+implementation before there is a failing test for it.

@@ -1,6 +1,6 @@
 {
   "name": "ai-skills",
-  "description": "Simon's curated engineering skills for Claude Code: clean-code, code-commenting, codebase-design, docs-sync, TDD, git conventions, devcontainer setup, lensed code review, waitwhat, and a /feature command that loads the engineering standards together.",
+  "description": "Simon's curated engineering skills for Claude Code: clean-code, code-commenting, codebase-design, docs-sync, TDD, git conventions, devcontainer setup, lensed code review, a review loop, waitwhat, and a /feature command that loads the engineering standards together.",
   "version": "0.9.1",
   "author": {
     "name": "Simon Lind"
@@ -26,6 +26,7 @@
     "./skills/feature",
     "./skills/git-conventions",
     "./skills/lensed-review",
+    "./skills/review-loop",
     "./skills/setup-ai-skills",
     "./skills/tdd",
     "./skills/waitwhat"

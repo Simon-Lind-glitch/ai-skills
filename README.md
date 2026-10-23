@@ -10,8 +10,9 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 
 Reachable only when you type them (`disable-model-invocation: true`), because firing unbidden would be expensive or presumptuous.
 
-- **[`feature`](skills/feature/SKILL.md)**: Build a feature with the engineering standards already in context. Inlines `codebase-design`, `tdd`, `clean-code`, `code-commenting`, `docs-sync`, and `git-conventions` at load time, ordered by when each applies, and arbitrates where they contradict each other.
+- **[`feature`](skills/feature/SKILL.md)**: Build a feature with the engineering standards already in context. Inlines `codebase-design`, `tdd`, `clean-code`, `code-commenting`, `docs-sync`, and `git-conventions` at load time, ordered by when each applies, and arbitrates where they contradict each other. Ends with `review-loop`.
 - **[`lensed-review`](skills/lensed-review/SKILL.md)**: Multi-angle code audit. Fans out parallel read-only lens agents, then synthesizes one scored report. Reviews the local branch by default, or a GitHub PR / GitLab MR with the forge detected from the remote. Posts only with `--post`; never approves, never merges.
+- **[`review-loop`](skills/review-loop/SKILL.md)**: Run a review skill, fix what blocks, and review again, until no severe or blocking finding is left or 10 rounds pass. Uses `lensed-review` by default; any review skill can replace it. `--until clean` also fixes the non-blocking findings.
 - **[`setup-ai-skills`](skills/setup-ai-skills/SKILL.md)**: Wire a repo up to this plugin by writing the marketplace and plugin declaration into its `.claude/settings.json`. Run once per repo.
 - **[`waitwhat`](skills/waitwhat/SKILL.md)**: Stop, that last message did not land: re-pitch it in Simplified Technical English using the project's own vocabulary. Changes nothing and re-runs nothing.
 
@@ -20,7 +21,7 @@ Reachable only when you type them (`disable-model-invocation: true`), because fi
 Loaded automatically when the task matches, and also reachable by typing them.
 
 - **[`clean-code`](skills/clean-code/SKILL.md)**: Robert C. Martin's *Clean Code* principles — naming, small functions, error handling, code smells.
-- **[`code-commenting`](skills/code-commenting/SKILL.md)**: When and how to comment — the non-obvious "why", placement that survives refactors, comments readable in 10 months. Pairs with `clean-code`.
+- **[`code-commenting`](skills/code-commenting/SKILL.md)**: When and how to comment — the non-obvious "why", placement that survives refactors, comments readable in 10 months. Owns the rule that all comments and documentation are written in ASD-STE100 Simplified Technical English. Pairs with `clean-code`.
 - **[`codebase-design`](skills/codebase-design/SKILL.md)**: Shared vocabulary for deep modules — interface, depth, seam, adapter, leverage, locality — plus deepening strategy and the design-it-twice pattern.
 - **[`devcontainer-setup`](skills/devcontainer-setup/SKILL.md)**: Get a devcontainer in place before development, so the agent runs sandboxed away from host credentials. Asks first; not a hard gate.
 - **[`docs-sync`](skills/docs-sync/SKILL.md)**: Find and fix the documentation a code change makes stale — grep the touched names across README, CLAUDE.md, and docs, then update or delete each hit. Doc changes ship in the same commit as the code. Pairs with `code-commenting`, which owns how the prose is written.
@@ -66,6 +67,7 @@ The original work in this repo is MIT ([`LICENSE`](LICENSE)). Vendored skills re
 | `docs-sync` | Team convention | — |
 | `feature` | Team convention | — |
 | `git-conventions` | Team convention | — |
+| `review-loop` | Team convention | — |
 | `setup-ai-skills` | Team convention | — |
 
 Two upstreams declare no licence, so no licence is claimed over their content here; they are vendored with attribution, and removing them is the remedy if an author objects.

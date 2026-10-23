@@ -45,6 +45,16 @@ _Avoid_: provider, remote, platform
 One agent's single-perspective mandate inside `lensed-review`, carrying an explicit NOT
 list. Nine exist; a run selects a subset.
 
+**Round**:
+One pass of `review-loop`: one review, then the fixes for its **Blocking findings**, then
+one commit. A run has 10 rounds at most.
+
+**Blocking finding**:
+A finding that `review-loop` must fix before it stops: a score of 7 or more, a
+high-severity label, or a defect with no severity given. Every finding blocks under
+`--until clean`.
+_Avoid_: severe finding, critical finding
+
 ## Relationships
 
 - A **Plugin** ships many **Skills**, and exactly those its `skills` array lists
@@ -52,6 +62,7 @@ list. Nine exist; a run selects a subset.
 - Every **Skill** is either **User-invoked** or **Model-invoked**, never both
 - A **Vendored skill** is a **Skill** with an upstream source
 - `lensed-review` runs many **Lenses** against one **Forge** target, or against a local diff
+- `review-loop` runs one review skill per **Round**, and stops when a **Round** has no **Blocking finding**
 
 ## Deferred vocabulary
 

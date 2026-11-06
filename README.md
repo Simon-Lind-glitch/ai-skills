@@ -11,11 +11,16 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 Reachable only when you type them (`disable-model-invocation: true`), because firing unbidden would be expensive or presumptuous.
 
 - **[`daily-summary`](skills/daily-summary/SKILL.md)**: Write the daily stand-up update (Done, Blockers, MRs to review, Next) from your own Jira tickets and GitLab or GitHub activity since the previous working day. Maps each MR to its ticket and prints one block to paste into chat. Then lists stale MRs, wrong ticket statuses and work with no ticket, and applies only the clean-up actions you pick.
+- **[`setup-ai-skills`](skills/setup-ai-skills/SKILL.md)**: Wire a repo up to this plugin by writing the marketplace and plugin declaration into its `.claude/settings.json`. Run once per repo.
+- **[`waitwhat`](skills/waitwhat/SKILL.md)**: Stop, that last message did not land: re-pitch it in Simplified Technical English using the project's own vocabulary. Changes nothing and re-runs nothing.
+
+### Model-suggested
+
+Claude can load them when your request matches, so you do not have to remember to type them. They ask you first and do nothing until you say yes. Typing them skips the question.
+
 - **[`feature`](skills/feature/SKILL.md)**: Build a feature with the engineering standards already in context. Inlines `codebase-design`, `tdd`, `clean-code`, `code-commenting`, `docs-sync`, and `git-conventions` at load time, ordered by when each applies, and arbitrates where they contradict each other. Ends with `review-loop`. With `--plan`, it first proposes a step-by-step plan in Simplified Technical English and waits for you to accept it.
 - **[`lensed-review`](skills/lensed-review/SKILL.md)**: Multi-angle code audit. Fans out parallel read-only lens agents, then synthesizes one scored report. Reviews the local branch by default, or a GitHub PR / GitLab MR with the forge detected from the remote. Posts only with `--post`; never approves, never merges.
 - **[`review-loop`](skills/review-loop/SKILL.md)**: Run a review skill, fix what blocks, and review again, until no severe or blocking finding is left or 10 rounds pass. Uses `lensed-review` by default; any review skill can replace it. `--until clean` also fixes the non-blocking findings.
-- **[`setup-ai-skills`](skills/setup-ai-skills/SKILL.md)**: Wire a repo up to this plugin by writing the marketplace and plugin declaration into its `.claude/settings.json`. Run once per repo.
-- **[`waitwhat`](skills/waitwhat/SKILL.md)**: Stop, that last message did not land: re-pitch it in Simplified Technical English using the project's own vocabulary. Changes nothing and re-runs nothing.
 
 ### Model-invoked
 
@@ -38,7 +43,7 @@ Add this repo as a marketplace, then install the plugin. All skills come with it
 /plugin install ai-skills@ai-skills
 ```
 
-Verify with `/plugin` (it should show `ai-skills` as enabled). Model-invoked skills then activate automatically when a task matches their description; user-invoked ones wait until you type them.
+Verify with `/plugin` (it should show `ai-skills` as enabled). Model-invoked skills then activate automatically when a task matches their description, model-suggested ones ask before they start, and user-invoked ones wait until you type them.
 
 To wire a specific repo up so the plugin loads for everyone who clones it, run `/ai-skills:setup-ai-skills` inside it.
 
@@ -48,7 +53,7 @@ This is a vendored collection — the skill files live in this repo, so nothing 
 
 1. Copy its folder into `skills/<skill-name>/` (must contain a `SKILL.md` with `name` and `description` frontmatter).
 2. Add it to the `skills` array in `.claude-plugin/plugin.json`. The plugin ships exactly what that array lists, so a folder that is not in it is not installed.
-3. Add a bullet to the matching section above, under **User-invoked** or **Model-invoked** depending on whether its frontmatter carries `disable-model-invocation: true`.
+3. Add a bullet to the matching section above, under **User-invoked**, **Model-suggested**, or **Model-invoked**. User-invoked means its frontmatter carries `disable-model-invocation: true`. Model-suggested means it starts with an "Ask first" section.
 4. Record its source and licence in the table below.
 5. Run `claude plugin validate . --strict`, then commit and push. Run `/plugin marketplace update ai-skills` to pick it up in a running session (a fresh install gets it automatically).
 

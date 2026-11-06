@@ -1,13 +1,28 @@
 ---
 name: feature
-description: Build a feature with this repo's engineering standards already in context — codebase-design, tdd, clean-code, code-commenting, docs-sync, and git-conventions are inlined at load time, in the order the work happens, and review-loop runs last. With --plan, it proposes a step-by-step plan and waits for approval before it starts.
+description: "Build a feature with the engineering standards in context: codebase-design, tdd, clean-code, code-commenting, docs-sync, git-conventions, then review-loop. With --plan, it proposes a plan first. TRIGGER when the user asks to build, implement, add, or change a feature, an endpoint, a component, a command, or a behavior in code. Asks before it starts. SKIP for a question, a one-line fix, a config value, or a change that is only docs."
 argument-hint: "[--plan] [what to build]"
-disable-model-invocation: true
 allowed-tools:
   - Bash(cat ${CLAUDE_PLUGIN_ROOT}/skills/*)
 ---
 
 # Feature
+
+## Ask first
+
+Do this step before anything else in this file. Do not run a tool before it.
+
+Look at the last message that the user wrote, as text. Do not look at what the skill loader added.
+
+- If that message contains `/feature` or `/ai-skills:feature`, skip this step.
+- If another skill told you to read this file, skip this step.
+- If the user already said yes to this skill in this conversation, for this task, skip this step.
+- Otherwise you called the Skill tool for this skill yourself, because the request matched its description. That is a suggestion, not a request from the user. Do not start the work. Ask the user one question, then end your turn and wait:
+
+  > This looks like feature work. Use the `feature` skill? It loads clean-code, tdd, codebase-design, and the git conventions, and runs `review-loop` at the end. Reply `yes`, `yes --plan`, or `no`.
+
+  - On yes, continue with this file. Use the request of the user as `$ARGUMENTS`.
+  - On no, do the task without this skill. Do not ask again for the same task.
 
 Build: **$ARGUMENTS**
 
@@ -121,6 +136,8 @@ If a rule below contradicts this section, this section wins.
 ---
 
 ## Now start
+
+Do the "Ask first" step at the top of this file now, if you did not do it yet. The skill text above is long, so do not skip that step. Look at the last message that the user wrote. If it does not contain `/feature` or `/ai-skills:feature`, and the user did not say yes yet, ask the question from that step. Then end your turn and wait for the answer.
 
 Build **$ARGUMENTS**, following the order above, through to step 7. With `--plan`, begin at
 step 0: write the plan and wait for the user to accept it. Without it, begin at step 1:

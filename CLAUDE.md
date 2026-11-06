@@ -17,12 +17,18 @@ what it names, so a folder under `skills/` that is not in the array does not
 exist as far as users are concerned. Adding a skill means touching the array,
 the README, and the source table in the same commit.
 
-Every `SKILL.md` is either **user-invoked** (`disable-model-invocation: true`,
-reachable only when a human types it) or **model-invoked** (loaded when its
-description matches). Pick deliberately: a skill that fans out subagents or
-writes to a forge should be user-invoked, so it cannot fire on a description
-match. The README groups skills under those two headings, so a change in
-invocation is also a README change.
+Every `SKILL.md` has one of three modes:
+
+- **User-invoked**: `disable-model-invocation: true`. Only a human can start it, by typing it.
+- **Model-invoked**: the agent loads it when its description matches.
+- **Model-suggested**: model-invoked, but it asks the user before it does anything.
+
+Pick deliberately. A skill that fans out
+subagents or writes to a forge is user-invoked or model-suggested. Thus it never
+starts on a description match alone. A model-suggested skill starts with an
+"Ask first" section. That section skips the question when the user typed the
+skill, or when another skill loaded it. The README groups skills under those
+three headings, so a change in invocation is also a README change.
 
 Comments and documentation are written in ASD-STE100 Simplified Technical
 English, and [`code-commenting`](skills/code-commenting/SKILL.md) is where that

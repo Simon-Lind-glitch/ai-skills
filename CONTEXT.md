@@ -30,6 +30,13 @@ _Avoid_: manual skill, explicit skill
 A **Skill** the agent may load on its own when its `description` matches the task. The
 default, and the reason a description is written as trigger conditions rather than a
 summary.
+
+**Model-suggested skill**:
+A **Model-invoked skill** that asks the user before it does anything, from an "Ask first"
+section at the top of its `SKILL.md`. The question is skipped when the user typed the
+skill, or when another skill loaded it. Used where firing unbidden would be expensive, but
+forgetting to type the skill costs more.
+_Avoid_: gated skill, confirm skill
 _Avoid_: automatic skill, ambient skill
 
 **Vendored skill**:
@@ -60,6 +67,7 @@ _Avoid_: severe finding, critical finding
 - A **Plugin** ships many **Skills**, and exactly those its `skills` array lists
 - A **Marketplace** offers a **Plugin**
 - Every **Skill** is either **User-invoked** or **Model-invoked**, never both
+- A **Model-suggested skill** is a **Model-invoked skill** with an "Ask first" section
 - A **Vendored skill** is a **Skill** with an upstream source
 - `lensed-review` runs many **Lenses** against one **Forge** target, or against a local diff
 - `review-loop` runs one review skill per **Round**, and stops when a **Round** has no **Blocking finding**

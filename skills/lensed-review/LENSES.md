@@ -1,9 +1,9 @@
 # Review lenses
 
 Shared protocol for multi-angle code review by parallel agents. Loaded on demand by
-[SKILL.md](SKILL.md), which carries `disable-model-invocation: true` so none of this
-activates unless someone asks for it by name. That is deliberate: a fan-out of up to
-14 agents is not something to trigger on a description match.
+[SKILL.md](SKILL.md), which is a model-suggested skill: the agent can load it on a
+description match, but it asks the user before it starts. That is deliberate: a fan-out
+of up to 14 agents must not start without a yes from the user.
 
 ## Caller contract
 

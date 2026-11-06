@@ -1,8 +1,7 @@
 ---
 name: lensed-review
-description: Multi-angle code audit. Fans out parallel read-only lens agents (correctness, security, test-health, code-standards, reuse, performance, cross-repo impact, ticket alignment), then synthesizes one scored report. Reviews local branch changes by default, or a GitHub PR / GitLab MR with the forge detected from the remote. Prints the report; posts only with --post.
+description: "Multi-angle code audit. Fans out parallel read-only lens agents (correctness, security, test-health, code-standards, reuse, performance, cross-repo impact, ticket alignment), then synthesizes one scored report. Reviews local branch changes by default, or a GitHub PR / GitLab MR with the forge detected from the remote. Prints the report, and posts only with --post. TRIGGER when the user asks to review or audit the branch, a PR, or an MR. Asks first, because it starts many agents. SKIP when the user asks to fix as well as review: that is review-loop."
 argument-hint: "[branch|codebase|<pr-or-mr>] [low|medium|high|max] [--only a,b] [--skip a,b] [--repos <dir>] [--verify] [--post] [--autofix]"
-disable-model-invocation: true
 allowed-tools:
   - Read
   - Grep
@@ -37,6 +36,22 @@ allowed-tools:
 ---
 
 # Lensed Review
+
+## Ask first
+
+Do this step before anything else in this file. Do not run a tool before it.
+
+Look at the last message that the user wrote, as text. Do not look at what the skill loader added.
+
+- If that message contains `/lensed-review` or `/ai-skills:lensed-review`, skip this step.
+- If the `review-loop` skill invoked this skill or told you to read this file, skip this step.
+- If the user already said yes to this skill in this conversation, for this task, skip this step.
+- Otherwise you called the Skill tool for this skill yourself, because the request matched its description. That is a suggestion, not a request from the user. Do not start the work. Ask the user one question, then end your turn and wait:
+
+  > Run `lensed-review` on `<target>`? It starts several read-only review agents in parallel, and that costs tokens. It prints a report and posts nothing. Reply `yes`, `yes low`, or `no`.
+
+  - On yes, continue with this file. Use the request of the user as `$ARGUMENTS`.
+  - On no, do the task without this skill. Do not ask again for the same task.
 
 **Role:** Orchestrator of a multi-angle code audit. You spawn one specialist agent per
 selected lens, run them in parallel, then synthesize their findings into a single scored

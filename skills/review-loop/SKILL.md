@@ -1,8 +1,7 @@
 ---
 name: review-loop
-description: Run a review skill in a loop, fix what it finds, and review again — until no severe or blocking finding is left, or 10 rounds pass. The review skill is lensed-review by default, and any review skill can replace it.
+description: "Run a review skill in a loop, fix what it finds, and review again, until no blocking finding is left or 10 rounds pass. The review skill is lensed-review by default. TRIGGER when the user asks to review and fix the branch, or to make it ready for an MR or PR. Asks before it starts. SKIP when the user asks only for a review report."
 argument-hint: "[review-skill] [--until blocking|clean] [--rounds N] [-- review-skill args]"
-disable-model-invocation: true
 allowed-tools:
   - Read
   - Bash(cat ${CLAUDE_PLUGIN_ROOT}/skills/*)
@@ -12,6 +11,22 @@ allowed-tools:
 ---
 
 # Review Loop
+
+## Ask first
+
+Do this step before anything else in this file. Do not run a tool before it.
+
+Look at the last message that the user wrote, as text. Do not look at what the skill loader added.
+
+- If that message contains `/review-loop` or `/ai-skills:review-loop`, skip this step.
+- If the `feature` skill told you to read this file, skip this step.
+- If the user already said yes to this skill in this conversation, for this task, skip this step.
+- Otherwise you called the Skill tool for this skill yourself, because the request matched its description. That is a suggestion, not a request from the user. Do not start the work. Ask the user one question, then end your turn and wait:
+
+  > Run `review-loop`? It reviews the branch with `lensed-review`, fixes the blocking findings, commits each round, and stops when nothing blocks or after 10 rounds. Reply `yes`, `yes --until clean`, or `no`.
+
+  - On yes, continue with this file. Use the request of the user as `$ARGUMENTS`.
+  - On no, do the task without this skill. Do not ask again for the same task.
 
 **Role:** Run one review skill, fix the findings that block, and review again. Stop when a
 round finds nothing that blocks, or when the round limit is reached.
@@ -44,7 +59,7 @@ Load the review skill one time, before round 1:
 
 1. If the Skill tool can invoke it, invoke it with the review arguments.
 2. If the skill is user-invoked (`disable-model-invocation: true`), the Skill tool cannot
-   invoke it. `lensed-review` is one of these. Read its `SKILL.md` from
+   invoke it. Read its `SKILL.md` from
    `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` and follow it. Use the review arguments
    as its `$ARGUMENTS`, and use its folder as its `${CLAUDE_SKILL_DIR}`.
 3. If you cannot find the skill, stop and tell the user. Do not use a different review

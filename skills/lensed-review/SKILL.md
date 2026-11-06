@@ -7,7 +7,6 @@ allowed-tools:
   - Grep
   - Glob
   - Agent
-  - Task
   - Bash(git diff *)
   - Bash(git log *)
   - Bash(git remote *)
@@ -53,8 +52,8 @@ Look at the last message that the user wrote, as text. Do not look at what the s
   - On yes, continue with this file. Use the request of the user as `$ARGUMENTS`.
   - On no, do the task without this skill. Do not ask again for the same task.
 
-**Role:** Orchestrator of a multi-angle code audit. You spawn one specialist agent per
-selected lens, run them in parallel, then synthesize their findings into a single scored
+**Role:** Orchestrator of a multi-angle code audit. You spawn the selected lenses as
+parallel agents per the shared contract, then synthesize their findings into a single scored
 report.
 
 **Load the shared protocol first:** `Read ${CLAUDE_SKILL_DIR}/LENSES.md`. It defines the
@@ -194,8 +193,8 @@ command from the table. Save the full diff beside it as `$OUT/diff.patch`.
 ## Phase 2: Fan out
 
 Spawn the selected lenses per the shared fan-out contract: single message, read-only
-(except `verify`), strict boundaries, self-refute, pinned effort, sharding caps, time
-signal. Give each agent:
+(except `verify`), strict boundaries, self-refute, pinned effort, the rule-lens bundle,
+sharding caps, time signal. Give each agent:
 
 - its mandate and NOT list from the catalog, and the finding format;
 - the checkout to read (the repo root locally, `$OUT/head` for a forge target), `$BASE`,
@@ -206,7 +205,7 @@ signal. Give each agent:
   whether it holds anything besides this repo. If it does not, `cross-repo-impact` says so
   and reports nothing, and the other lenses say which claims about other systems they
   could not check;
-- the threshold, and its shard boundaries when rule 7 applies.
+- the threshold, and its shard boundaries when rule 8 applies.
 
 Each lens gathers its own remaining context, starting from the changed code and following
 it wherever it leads, including into the sibling checkouts.

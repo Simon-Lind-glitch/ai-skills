@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: feature-typed
+description: A typed /feature starts the work and does not ask the ask-first question.
+tags: [needs-shell, model-suggested, feature]
+context:
+  scaffold_script: fixture.sh

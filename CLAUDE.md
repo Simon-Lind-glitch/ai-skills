@@ -3,7 +3,8 @@
 A Claude Code plugin: thirteen skills as Markdown under `skills/`, described by
 `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`. The
 artifacts are the Markdown files and the two manifests; the only executable
-code is the release logic under `.github/`, which is the only thing with tests.
+code is the release logic under `.github/`, which has unit tests. The skills
+have eval cases under `evals/` instead.
 
 [`CONTEXT.md`](CONTEXT.md) holds this repo's vocabulary. Use its terms rather
 than coining new ones, and the design terms it defers to
@@ -75,6 +76,27 @@ of the host's credentials. It carries the CI toolchain (`jq`, `gh`) plus
     shellcheck .devcontainer/post-create.sh .github/scripts/*.sh
     .github/scripts/test-version-bump.sh
     claude plugin validate . --strict
+
+## Evals
+
+`evals/` holds `claude plugin eval` cases. Each case gives Claude a prompt in a
+small git repository that the case's `fixture.sh` makes. Its graders look at which
+skill loaded and what Claude did, for example that a model-suggested skill asks
+before it starts. The format is in the
+[plugin evals docs](https://code.claude.com/docs/en/plugin-evals.md).
+
+Each run is a real Claude session, so each run costs money. Use one run and no
+baseline arm while you work on a skill:
+
+    claude plugin eval . --scaffold --runs 1 --ablation none --tag no-shell
+
+Cases tagged `needs-shell` load `feature`, which reads its inlined skills with
+`cat`. An eval run removes Bash unless you grant it. Under WSL, the eval sandbox
+refuses every run that has a shell, so run these cases only on Linux or macOS:
+
+    claude plugin eval . --scaffold --runs 1 --ablation none --allow-tools "Bash(cat *)"
+
+Add or change a case in the same commit as the skill change that it tests.
 
 ## Skills inside the container
 

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: feature-suggested
+description: A request to build a feature loads the feature skill, which asks before it starts.
+tags: [needs-shell, model-suggested, feature]
+context:
+  scaffold_script: fixture.sh

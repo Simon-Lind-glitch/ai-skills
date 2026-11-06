@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: lensed-review-suggested
+description: A request to review the branch loads lensed-review, which asks before it starts any review agent.
+tags: [no-shell, model-suggested, lensed-review]
+context:
+  scaffold_script: fixture.sh

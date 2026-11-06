@@ -6,5 +6,7 @@
     "MD013": false
   },
   "globs": ["**/*.md"],
-  "ignores": ["node_modules"]
+  // An eval prompt is the message a user types, not a document, so it has no
+  // heading. The eval results are generated.
+  "ignores": ["node_modules", "evals/*/prompt.md", "evals/results"]
 }

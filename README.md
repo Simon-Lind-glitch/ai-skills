@@ -10,6 +10,7 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 
 Reachable only when you type them (`disable-model-invocation: true`), because firing unbidden would be expensive or presumptuous.
 
+- **[`daily-summary`](skills/daily-summary/SKILL.md)**: Write the daily stand-up update (Done, Blockers, MRs to review, Next) from your own Jira tickets and GitLab or GitHub activity since the previous working day. Maps each MR to its ticket and prints one block to paste into chat. Then lists stale MRs, wrong ticket statuses and work with no ticket, and applies only the clean-up actions you pick.
 - **[`feature`](skills/feature/SKILL.md)**: Build a feature with the engineering standards already in context. Inlines `codebase-design`, `tdd`, `clean-code`, `code-commenting`, `docs-sync`, and `git-conventions` at load time, ordered by when each applies, and arbitrates where they contradict each other. Ends with `review-loop`. With `--plan`, it first proposes a step-by-step plan in Simplified Technical English and waits for you to accept it.
 - **[`lensed-review`](skills/lensed-review/SKILL.md)**: Multi-angle code audit. Fans out parallel read-only lens agents, then synthesizes one scored report. Reviews the local branch by default, or a GitHub PR / GitLab MR with the forge detected from the remote. Posts only with `--post`; never approves, never merges.
 - **[`review-loop`](skills/review-loop/SKILL.md)**: Run a review skill, fix what blocks, and review again, until no severe or blocking finding is left or 10 rounds pass. Uses `lensed-review` by default; any review skill can replace it. `--until clean` also fixes the non-blocking findings.
@@ -63,6 +64,7 @@ The original work in this repo is MIT ([`LICENSE`](LICENSE)). Vendored skills re
 | `waitwhat` | [mattpocock/skills](https://github.com/mattpocock/skills) (`wait-what`) | MIT |
 | `lensed-review` | [cesdperez/llmfiles](https://github.com/cesdperez/llmfiles) | None declared |
 | `code-commenting` | Team convention | — |
+| `daily-summary` | Team convention | — |
 | `devcontainer-setup` | Team convention | — |
 | `docs-sync` | Team convention | — |
 | `feature` | Team convention | — |

@@ -76,16 +76,30 @@ Then get these lists:
 
 ```bash
 # The MRs where the user is a reviewer
-glab api "merge_requests?scope=all&reviewer_id=<id>&state=opened&per_page=100" --paginate
+glab api "merge_requests?scope=all&reviewer_id=<id>&state=opened&non_archived=true&per_page=100" --paginate
 # The pending to-do items: review requests, mentions, questions, MRs that cannot merge
 glab api "todos?state=pending&per_page=100" --paginate
 # The open MRs of the user
-glab api "merge_requests?scope=all&author_id=<id>&state=opened&per_page=100" --paginate
+glab api "merge_requests?scope=all&author_id=<id>&state=opened&non_archived=true&per_page=100" --paginate
 # The events of the user, for Where you stopped
 glab api "users/<id>/events?after=<day before window start>&per_page=100" --paginate
 ```
 
 The `after` filter of the events API excludes its own date. Thus give the day before the window start.
+
+#### Drop the closed targets and the archived projects
+
+A merged or closed MR, and an MR in an archived project, waits for nobody. Keep these items out of Reviews, Waiting on you, and Where you stopped:
+
+- The MR queries above use `state=opened` and `non_archived=true`. Do not remove these filters.
+- The to-do API has no filter for these items. Keep a to-do item only when its `target.state` is `opened`.
+- The to-do item does not show the `archived` flag of its project. Get the project of each remaining to-do item one time, and drop the item when `archived` is `true`:
+
+```bash
+glab api "projects/<project.id>" | jq '.archived'
+```
+
+- Drop a to-do item whose `target_type` is not `MergeRequest` or `Issue`, for example a notice about an expired SSH key.
 
 For each MR where the user is a reviewer, get the review state of the user:
 
@@ -100,8 +114,8 @@ Keep the `state` of the entry whose `user.username` is the user. The values are 
 Use `gh` when `gh auth status` succeeds:
 
 ```bash
-gh search prs --review-requested=@me --state=open --json repository,number,title,url,author,updatedAt
-gh search prs --author=@me --state=open --json repository,number,title,url,updatedAt
+gh search prs --review-requested=@me --state=open --archived=false --json repository,number,title,url,author,updatedAt
+gh search prs --author=@me --state=open --archived=false --json repository,number,title,url,updatedAt
 gh api notifications --jq '.[] | select(.reason == "mention" or .reason == "review_requested" or .reason == "assign")'
 ```
 
@@ -201,10 +215,12 @@ Print the recap from "The output" first. Do not ask a question before it.
 
 Under the recap, print a numbered list with the heading **Clean up** when one of these items exists:
 
-- A stale to-do item: the user already answered, or its target is now merged or closed.
+- A stale to-do item on an open target: the user already answered it.
 - A review on a draft that the user is a reviewer of, with no change in the last 21 days.
 
 Give one item on one line: the number, the linked reference, the reason in at most 10 words, and the action "Mark done?". Give at most 10 items. Then give the number that you left out.
+
+Do not list the to-do items that step 2 dropped one by one. When there are some, give them as one last item: "`<n>` to-dos on merged, closed, or archived targets. Mark all done?"
 
 After the list, give at most 3 short lines:
 

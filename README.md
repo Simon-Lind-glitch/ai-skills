@@ -10,6 +10,7 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` (plus 
 
 Reachable only when you type them (`disable-model-invocation: true`), because firing unbidden would be expensive or presumptuous.
 
+- **[`daily-recap`](skills/daily-recap/SKILL.md)**: Your private morning recap. Lists the reviews that wait for you, the questions and MRs that other people wait on (GitLab to-dos, GitHub notifications, Jira comments, and Slack when it is connected), each with its age, and where you stopped work. Reads only, except that it marks the stale to-dos done that you pick.
 - **[`daily-summary`](skills/daily-summary/SKILL.md)**: Write the daily stand-up update (Done, Blockers, MRs to review, Next) from your own Jira tickets and GitLab or GitHub activity since the previous working day. Maps each MR to its ticket and prints one block to paste into chat. Then lists stale MRs, wrong ticket statuses and work with no ticket, and applies only the clean-up actions you pick.
 - **[`setup-ai-skills`](skills/setup-ai-skills/SKILL.md)**: Wire a repo up to this plugin by writing the marketplace and plugin declaration into its `.claude/settings.json`. Run once per repo.
 - **[`waitwhat`](skills/waitwhat/SKILL.md)**: Stop, that last message did not land: re-pitch it in Simplified Technical English using the project's own vocabulary. Changes nothing and re-runs nothing.
@@ -69,6 +70,7 @@ The original work in this repo is MIT ([`LICENSE`](LICENSE)). Vendored skills re
 | `waitwhat` | [mattpocock/skills](https://github.com/mattpocock/skills) (`wait-what`) | MIT |
 | `lensed-review` | [cesdperez/llmfiles](https://github.com/cesdperez/llmfiles) | None declared |
 | `code-commenting` | Team convention | — |
+| `daily-recap` | Team convention | — |
 | `daily-summary` | Team convention | — |
 | `devcontainer-setup` | Team convention | — |
 | `docs-sync` | Team convention | — |

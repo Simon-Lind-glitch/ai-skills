@@ -1,9 +1,12 @@
 ---
 name: feature
-description: "Build a feature with the engineering standards in context: codebase-design, tdd, clean-code, code-commenting, docs-sync, git-conventions, then review-loop. With --plan, it proposes a plan first. TRIGGER when the user asks to build, implement, add, or change a feature, an endpoint, a component, a command, or a behavior in code. Asks before it starts. SKIP for a question, a one-line fix, a config value, or a change that is only docs."
-argument-hint: "[--plan] [what to build]"
+description: "Build a feature with the engineering standards in context: codebase-design, tdd, clean-code, code-commenting, docs-sync, git-conventions, then review-loop. With --plan, it proposes a plan first. It stops at a checkpoint after each step, with the change staged, until the user says go; --auto runs without checkpoints. TRIGGER when the user asks to build, implement, add, or change a feature, an endpoint, a component, a command, or a behavior in code. Asks before it starts. SKIP for a question, a one-line fix, a config value, or a change that is only docs."
+argument-hint: "[--plan] [--auto] [what to build]"
 allowed-tools:
   - Bash(cat ${CLAUDE_PLUGIN_ROOT}/skills/*)
+  - Bash(git add *)
+  - Bash(git diff *)
+  - Bash(git status *)
 ---
 
 # Feature
@@ -19,16 +22,17 @@ Look at the last message that the user wrote, as text. Do not look at what the s
 - If the user already said yes to this skill in this conversation, for this task, skip this step.
 - Otherwise you called the Skill tool for this skill yourself, because the request matched its description. That is a suggestion, not a request from the user. Do not start the work. Ask the user one question, then end your turn and wait:
 
-  > This looks like feature work. Use the `feature` skill? It loads clean-code, tdd, codebase-design, and the git conventions, and runs `review-loop` at the end. Reply `yes`, `yes --plan`, or `no`.
+  > This looks like feature work. Use the `feature` skill? It loads clean-code, tdd, codebase-design, and the git conventions, and runs `review-loop` at the end. It stops after each step with the change staged, so you can read it before it is committed. Reply `yes`, `yes --plan`, `yes --auto`, or `no`.
 
   - On yes, continue with this file. Use the request of the user as `$ARGUMENTS`.
   - On no, do the task without this skill. Do not ask again for the same task.
 
 Build: **$ARGUMENTS**
 
-If the arguments include `--plan`, remove it from the text above: it is a flag, not part
-of what to build. Then start at step 0 below. Without `--plan`, skip step 0 and start at
-step 1.
+If the arguments include `--plan` or `--auto`, remove them from the text above: they are
+flags, not part of what to build. With `--plan`, start at step 0 below. Without `--plan`,
+skip step 0 and start at step 1. With `--auto`, do not stop at the checkpoints (see
+[Checkpoints](#checkpoints)). Without it, stop at each one.
 
 Six skills are inlined below. They are already in context — do not invoke them again, and
 do not go looking for them on disk. The seventh, `review-loop`, is loaded at step 7, when
@@ -60,24 +64,78 @@ The skills overlap, so their precedence matters more than their content.
    seam. Ask which seams matter before writing the first test, not after.
 3. **Red → green, one vertical slice at a time.** One seam, one failing test, one minimal
    implementation, repeat. Never write all the tests first — that is horizontal slicing,
-   and it verifies imagined behavior.
+   and it verifies imagined behavior. Before the first commit, if you are on the default
+   branch, create a branch per `git-conventions`. After each slice is green, stop at a
+   checkpoint: the slice is one commit.
 4. **Then clean up.** Naming and function shape per `clean-code`; comments per
    `code-commenting`, which means the non-obvious _why_ on the line that is easy to get
    wrong, in ASD-STE100 Simplified Technical English, and nothing that narrates the change
    you just made. Refactoring is a stage of its own, not a step inside the red → green
-   loop.
+   loop. Stop at a checkpoint when the clean-up is done. If there was nothing to clean
+   up, say so and do not stop.
 5. **Sync the docs.** Per `docs-sync`: list the names the change touched, grep the prose
    for them, and update or delete every stale hit. Write the prose in ASD-STE100, per
    `code-commenting`. A feature is not done while a doc it contradicts still ships, and the
-   doc changes go in the same commit as the code.
-6. **Branch, commit, and title the MR** per `git-conventions`, which is also what decides
-   whether a release gets cut.
+   doc changes go in the same commit as the code: stage them with the last slice or the
+   clean-up, before its checkpoint, or stop at a checkpoint of their own if those are
+   already committed.
+6. **Commit and title the MR** per `git-conventions`, which is also what decides whether
+   a release gets cut. The checkpoints make the commits; write each message per
+   `git-conventions`. Then give the MR title.
 7. **Review until nothing blocks.** Run
    `cat "${CLAUDE_PLUGIN_ROOT}/skills/review-loop/SKILL.md"` and follow it with its
-   defaults: `lensed-review` on the branch, until no severe or blocking finding is left,
+   defaults, plus `--auto` if this run has `--auto`: the Opus 5.5 reviewer that runs `code-review` at `high` on the branch, until no severe or blocking finding is left,
    10 rounds at most. Its fixes follow steps 3 to 6: a test before a correctness fix, the
    standards above, and a commit per round. The feature is done when the loop stops
    clean. If it stops for another reason, give its report to the user and stop there.
+
+## Checkpoints
+
+Do all the work in the current working tree, on the current branch. Do not create a git
+worktree, a clone, or a copy of the repo, and do not move to one, also if a repo
+instruction such as an `AGENTS.md` tells you to. The user reads the staged change in
+their own editor and with their own `git diff --staged`. If the working tree has changes
+when you start, tell the user which files, and do not stage or change them without
+asking.
+
+A checkpoint is a stop with the change staged and not committed, so the user can read it
+and understand it before it goes into the history. Without `--auto`, stop at each
+checkpoint that the steps above name. With `--auto`, commit at each checkpoint and
+continue.
+
+1. **Verify.** Run the tests and the linters that the change touches. Do not stop at a
+   checkpoint with a failing build, except for the failing test of a red step that you
+   show on purpose.
+2. **Stage only this step.** Stage the files that this step changed, by name:
+   `git add <path>...`. Never `git add -A` or `git add .`. A file that the user changed is
+   not yours to stage.
+3. **Show the checkpoint, then end the turn.** Use this form. Write the prose in
+   ASD-STE100, per `code-commenting`. Explain the change; do not paste the diff:
+
+   ```text
+   ## Checkpoint <n> - <slice | clean-up | docs>: <one line>
+
+   What it does: <the behavior that is new, from the view of a caller>
+   Seam and test: <the seam, the test name, and why it failed before the change>
+   How: <the code that changed and why, in two or three sentences>
+   Look at: <the one or two lines that are easy to get wrong, as file:line>
+   Verify: <the commands> → pass
+
+   Staged:
+   <the output of git diff --staged --stat>
+
+   Read the change with `git diff --staged`.
+   Reply `go` to commit it and continue, tell me what to change, or `stop`.
+   ```
+
+4. **Wait for the user.**
+   - **`go`**: run `git diff --staged --stat` again. The user can stage or unstage
+     files, and what is staged now is the decision. Commit it, then continue.
+   - **`go --auto`**: the same, and do not stop at the next checkpoints.
+   - **A change or a question**: answer it, or make the change, verify, stage, and show
+     the checkpoint again. A question is not a `go`.
+   - **`stop`**: leave the change staged and stop the skill. Tell the user where the work
+     stopped and what comes next.
 
 ## Where they disagree
 
@@ -139,7 +197,8 @@ If a rule below contradicts this section, this section wins.
 
 Do the "Ask first" step at the top of this file now, if you did not do it yet. The skill text above is long, so do not skip that step. Look at the last message that the user wrote. If it does not contain `/feature` or `/ai-skills:feature`, and the user did not say yes yet, ask the question from that step. Then end your turn and wait for the answer.
 
-Build **$ARGUMENTS**, following the order above, through to step 7. With `--plan`, begin at
+Build **$ARGUMENTS**, following the order above, through to step 7. Without `--auto`,
+stop at each checkpoint and wait for `go`. With `--plan`, begin at
 step 0: write the plan and wait for the user to accept it. Without it, begin at step 1:
 state the interface and the seam, and ask which seams should be tested. Do not write an
 implementation before there is a failing test for it.

@@ -45,16 +45,19 @@ referenced. `README.md` records its source and licence status.
 
 **Forge**:
 The host of a repo's change-review workflow: GitHub or GitLab. Named as one thing because
-`lensed-review` detects which is in play and binds its commands accordingly.
+the daily skills detect which is in play and bind their commands accordingly.
 _Avoid_: provider, remote, platform
 
-**Lens**:
-One agent's single-perspective mandate inside `lensed-review`, carrying an explicit NOT
-list. Nine exist; a run selects a subset.
-
 **Round**:
-One pass of `review-loop`: one review, then the fixes for its **Blocking findings**, then
-one commit. A run has 10 rounds at most.
+One pass of `review-loop`: one review, then the fixes for its **Blocking findings**, each
+stopped at a **Checkpoint** and committed when the user accepts it. A run has 10 rounds at
+most.
+
+**Checkpoint**:
+A stop of `feature` or `review-loop` with one change staged in the checkout of the user
+and not committed, with an explanation of it. The skill commits the change only when the
+user replies `go`. `--auto` turns the stops off.
+_Avoid_: pause, gate, approval step
 
 **Blocking finding**:
 A finding that `review-loop` must fix before it stops: a score of 7 or more, a
@@ -69,7 +72,6 @@ _Avoid_: severe finding, critical finding
 - Every **Skill** is either **User-invoked** or **Model-invoked**, never both
 - A **Model-suggested skill** is a **Model-invoked skill** with an "Ask first" section
 - A **Vendored skill** is a **Skill** with an upstream source
-- `lensed-review` runs many **Lenses** against one **Forge** target, or against a local diff
 - `review-loop` runs one review skill per **Round**, and stops when a **Round** has no **Blocking finding**
 
 ## Deferred vocabulary
@@ -81,10 +83,10 @@ skill's definitions everywhere in this repo.
 ## Flagged ambiguities
 
 - "MR" vs "PR". `git-conventions` says **merge request** because the team's forge is
-  GitLab; `lensed-review` covers both. Resolved: keep the forge's own word when describing
+  GitLab; the daily skills cover both. Resolved: keep the forge's own word when describing
   that forge, and write "the PR or MR" only where a skill genuinely spans both. Do not
   coin a neutral third term.
 - "command" vs "skill". Resolved: **Skill** always, qualified as **User-invoked** where
   the distinction matters. `commands/` is not a directory this repo uses.
-- "review" alone was ambiguous between the `lensed-review` skill and the human act.
+- "review" alone was ambiguous between a review skill and the human act.
   Resolved: name the skill when you mean the skill.

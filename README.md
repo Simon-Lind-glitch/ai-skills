@@ -19,9 +19,8 @@ Reachable only when you type them (`disable-model-invocation: true`), because fi
 
 Claude can load them when your request matches, so you do not have to remember to type them. They ask you first and do nothing until you say yes. Typing them skips the question.
 
-- **[`feature`](skills/feature/SKILL.md)**: Build a feature with the engineering standards already in context. Inlines `codebase-design`, `tdd`, `clean-code`, `code-commenting`, `docs-sync`, and `git-conventions` at load time, ordered by when each applies, and arbitrates where they contradict each other. Ends with `review-loop`. With `--plan`, it first proposes a step-by-step plan in Simplified Technical English and waits for you to accept it.
-- **[`lensed-review`](skills/lensed-review/SKILL.md)**: Multi-angle code audit. Fans out parallel read-only lens agents, then synthesizes one scored report. Reviews the local branch by default, or a GitHub PR / GitLab MR with the forge detected from the remote. Posts only with `--post`; never approves, never merges.
-- **[`review-loop`](skills/review-loop/SKILL.md)**: Run a review skill, fix what blocks, and review again, until no severe or blocking finding is left or 10 rounds pass. Uses `lensed-review` by default; any review skill can replace it. `--until clean` also fixes the non-blocking findings.
+- **[`feature`](skills/feature/SKILL.md)**: Build a feature with the engineering standards already in context. Inlines `codebase-design`, `tdd`, `clean-code`, `code-commenting`, `docs-sync`, and `git-conventions` at load time, ordered by when each applies, and arbitrates where they contradict each other. Ends with `review-loop`. With `--plan`, it first proposes a step-by-step plan in Simplified Technical English and waits for you to accept it. It stops after each slice, the clean-up, and the docs with the change staged in your checkout, and commits only when you say `go`; `--auto` runs without these stops.
+- **[`review-loop`](skills/review-loop/SKILL.md)**: Run a review skill, fix what blocks, and review again, until no severe or blocking finding is left or 10 rounds pass. Each round, a fresh Opus 5.5 agent at high effort runs `code-review high` on the branch; any review skill can replace it. It stops at each blocking finding: it explains the problem, stages the fix in your checkout, and waits for you to accept or decline it. `--auto` runs without these stops, and `--until clean` also fixes the non-blocking findings.
 
 ### Model-invoked
 
@@ -68,7 +67,6 @@ The original work in this repo is MIT ([`LICENSE`](LICENSE)). Vendored skills re
 | `codebase-design` | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `tdd` | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `waitwhat` | [mattpocock/skills](https://github.com/mattpocock/skills) (`wait-what`) | MIT |
-| `lensed-review` | [cesdperez/llmfiles](https://github.com/cesdperez/llmfiles) | None declared |
 | `code-commenting` | Team convention | — |
 | `daily-recap` | Team convention | — |
 | `daily-summary` | Team convention | — |

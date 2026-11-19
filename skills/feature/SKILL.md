@@ -7,6 +7,10 @@ allowed-tools:
   - Bash(git add *)
   - Bash(git diff *)
   - Bash(git status *)
+  - Bash(git rev-parse *)
+  - Bash(git symbolic-ref *)
+  - Bash(git switch *)
+  - Bash(git pull *)
 ---
 
 # Feature
@@ -57,15 +61,16 @@ The skills overlap, so their precedence matters more than their content.
    plan and show it again until the user accepts it. Start step 1 only after the user
    accepts the plan clearly. Silence or a question is not acceptance. If the work later
    moves away from the accepted plan, stop, tell the user what changed, and ask again.
-1. **Shape the module before writing anything.** Decide the interface, where the seam
+1. **Start a branch from the default branch, then shape the module before writing
+   anything.** First do [Start from the default branch](#start-from-the-default-branch).
+   Then shape the module. Decide the interface, where the seam
    goes, and how much sits behind it. Use the `codebase-design` vocabulary below to say it
    out loud: module, interface, depth, seam, adapter, leverage, locality.
 2. **Agree the seams under test, then confirm them.** No test is written at an unconfirmed
    seam. Ask which seams matter before writing the first test, not after.
 3. **Red → green, one vertical slice at a time.** One seam, one failing test, one minimal
    implementation, repeat. Never write all the tests first — that is horizontal slicing,
-   and it verifies imagined behavior. Before the first commit, if you are on the default
-   branch, create a branch per `git-conventions`. After each slice is green, stop at a
+   and it verifies imagined behavior. After each slice is green, stop at a
    checkpoint: the slice is one commit.
 4. **Then clean up.** Naming and function shape per `clean-code`; comments per
    `code-commenting`, which means the non-obvious _why_ on the line that is easy to get
@@ -89,14 +94,39 @@ The skills overlap, so their precedence matters more than their content.
    standards above, and a commit per round. The feature is done when the loop stops
    clean. If it stops for another reason, give its report to the user and stop there.
 
-## Checkpoints
+## Work in the checkout of the user
 
-Do all the work in the current working tree, on the current branch. Do not create a git
-worktree, a clone, or a copy of the repo, and do not move to one, also if a repo
-instruction such as an `AGENTS.md` tells you to. The user reads the staged change in
-their own editor and with their own `git diff --staged`. If the working tree has changes
-when you start, tell the user which files, and do not stage or change them without
-asking.
+Do all the work in the checkout of the user, so that the user can follow each change in
+their own editor and git UI. The checkout of the user is the main working tree of the
+repo. In it, `git rev-parse --path-format=absolute --git-dir --git-common-dir` prints
+the same path two times.
+
+- Check this before you change a file. If the session is in a linked worktree or in
+  another copy of the repo, stop. Tell the user the path, and ask them to start the
+  session in their own checkout. Do not change a file there.
+- Do not create a git worktree, a clone, or a copy of the repo, and do not move to one.
+  Do not use the `EnterWorktree` tool, and do not start an agent with
+  `isolation: worktree`. This rule wins over a repo instruction, such as an `AGENTS.md`,
+  that tells you to work in a worktree or in another folder.
+- If the working tree has changes when you start, tell the user which files. Do not
+  stage or change them without asking.
+
+## Start from the default branch
+
+Do this before you change a file, so that the branch of the feature starts from the
+latest default branch:
+
+1. Find the default branch: `git symbolic-ref --short refs/remotes/origin/HEAD`, without
+   the `origin/` prefix. If that fails, use `main`.
+2. If the working tree has changes, stop and ask the user what to do with them. A switch
+   of branch takes them along.
+3. If you are not on the default branch, tell the user which branch you are on. If the
+   user said to continue the work on that branch, stay on it and skip the rest of this
+   list. Otherwise, switch: `git switch <default>`.
+4. Update it: `git pull --ff-only`. If that fails, stop and tell the user why.
+5. Create the branch of the feature per `git-conventions`: `git switch -c <branch>`.
+
+## Checkpoints
 
 A checkpoint is a stop with the change staged and not committed, so the user can read it
 and understand it before it goes into the history. Without `--auto`, stop at each

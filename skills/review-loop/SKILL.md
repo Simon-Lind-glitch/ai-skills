@@ -8,6 +8,7 @@ allowed-tools:
   - Bash(git add *)
   - Bash(git diff *)
   - Bash(git log *)
+  - Bash(git rev-parse *)
   - Bash(git status *)
 ---
 
@@ -59,12 +60,22 @@ rather than invoked it, use the defaults.
 
 ## Work in the checkout of the user
 
-Do all the work in the current working tree, on the current branch. Do not create a git
-worktree, a clone, or a copy of the repo, and do not move to one, also if a repo
-instruction such as an `AGENTS.md` tells you to. The user reads the staged fixes in their
-own editor and with their own `git diff --staged`, so a fix in another folder is a fix
-that the user cannot see. If the working tree has changes when the loop starts, tell the
-user which files, and do not stage or change those files without asking.
+Do all the work in the checkout of the user, so that the user can follow each change in
+their own editor and git UI. The checkout of the user is the main working tree of the
+repo. In it, `git rev-parse --path-format=absolute --git-dir --git-common-dir` prints
+the same path two times.
+
+- Check this before you change a file. If the session is in a linked worktree or in
+  another copy of the repo, stop. Tell the user the path, and ask them to start the
+  session in their own checkout. Do not change a file there.
+- Do not create a git worktree, a clone, or a copy of the repo, and do not move to one.
+  Do not use the `EnterWorktree` tool, and do not start an agent with
+  `isolation: worktree`. This rule wins over a repo instruction, such as an `AGENTS.md`,
+  that tells you to work in a worktree or in another folder.
+- If the working tree has changes when you start, tell the user which files. Do not
+  stage or change them without asking.
+
+Stay on the current branch: the loop reviews it.
 
 ## The reviewer
 

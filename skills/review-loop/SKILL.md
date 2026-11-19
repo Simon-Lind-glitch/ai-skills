@@ -81,15 +81,17 @@ Stay on the current branch: the loop reviews it.
 
 Without a review-skill argument, each round's review is one new agent. Start it with the
 Agent tool, with `model: opus` (Opus 5.5) and `effort: high`. Start a new agent in each
-round, and give it no ledger and no summary of your fixes, so that it does not anchor on
-the last round. Give it this brief, with the branch name and the review arguments filled
-in:
+round, and give it no summary of your fixes, so that it does not anchor on the last
+round. Give it this brief, with the branch name and the review arguments filled in:
 
 > Run the `code-review` skill with the arguments `high <branch> <review arguments>`. Review
 > the full change of the branch against its merge base with the default branch. Change no
 > file, and post nothing. Report each finding as: file:line, category (correctness,
 > security, or a clean-up such as reuse, simplification, or efficiency), what goes wrong,
 > and a concrete input or state that makes it go wrong. If there is no finding, say so.
+
+If the ledger has declined findings, add them to the brief, one line each with the
+reason, and tell the agent not to report them again.
 
 If the Agent tool cannot start an agent on Opus, stop and tell the user. Do not review on
 another model in its place.
@@ -199,6 +201,9 @@ fixed, declined, or left (non-blocking).
 
 - A declined finding stays declined. If a later round reports it again, do not fix it,
   and do not count it.
+- Put each declined finding in the description of the MR or PR, in a section
+  `Declined review findings`: the finding and the reason, one line each. A review bot
+  reads the description. Without this list, it reports the same findings again.
 - If a finding that you fixed comes back in a later round, the fix did not work. Fix it
   one more time. If it comes back a third time, stop the loop and tell the user. The
   fixes are not converging, and a person must decide.

@@ -93,6 +93,7 @@ The skills overlap, so their precedence matters more than their content.
    10 rounds at most. Its fixes follow steps 3 to 6: a test before a correctness fix, the
    standards above, and a commit per round. The feature is done when the loop stops
    clean. If it stops for another reason, give its report to the user and stop there.
+   Its declined findings go in the MR description, as `review-loop` says.
 
 ## Work in the checkout of the user
 
